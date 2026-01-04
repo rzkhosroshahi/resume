@@ -1,0 +1,18 @@
+# Build outputs
+build/
+*.log
+*.aux
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.idx
+*.ind
+*.ilg
+*.nav
+*.snm
+*.fdb_latexmk
+*.fls
