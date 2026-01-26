@@ -70,6 +70,7 @@ if command -v git &> /dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
     GIT_BRANCH=$(echo "$GIT_BRANCH" | sed 's/[^a-zA-Z0-9._-]/-/g')
     OUTPUT_NAME="reza-khosroshahi-${GIT_BRANCH}"
 else
+    GIT_BRANCH="main"
     OUTPUT_NAME="reza-khosroshahi-main"
 fi
 
@@ -216,6 +217,45 @@ else
     exit 1
 fi
 
+# Compile cover letter if it exists
+COVER_LETTER="cover_letter.tex"
+if [ -f "$COVER_LETTER" ]; then
+    echo ""
+    echo -e "${GREEN}Compiling cover letter: $COVER_LETTER${NC}"
+    COVER_BASE_NAME="${COVER_LETTER%.tex}"
+    COVER_OUTPUT_NAME="cover-letter-${GIT_BRANCH:-main}"
+    
+    # First compilation
+    echo -e "${YELLOW}Running pdflatex (first pass)...${NC}"
+    if [ "$VERBOSE" = true ]; then
+        pdflatex -interaction=nonstopmode -file-line-error -halt-on-error -output-directory="$BUILD_DIR" -jobname="$COVER_OUTPUT_NAME" "$COVER_LETTER" 2>&1 | tee /tmp/latex_cover_output.log
+        COVER_COMPILE_EXIT_CODE=${PIPESTATUS[0]}
+    else
+        pdflatex -interaction=nonstopmode -file-line-error -halt-on-error -output-directory="$BUILD_DIR" -jobname="$COVER_OUTPUT_NAME" "$COVER_LETTER" > /tmp/latex_cover_output.log 2>&1
+        COVER_COMPILE_EXIT_CODE=$?
+    fi
+    
+    if [ $COVER_COMPILE_EXIT_CODE -eq 0 ]; then
+        # Second compilation
+        echo -e "${YELLOW}Running pdflatex (second pass)...${NC}"
+        if [ "$VERBOSE" = true ]; then
+            pdflatex -interaction=nonstopmode -file-line-error -halt-on-error -output-directory="$BUILD_DIR" -jobname="$COVER_OUTPUT_NAME" "$COVER_LETTER" 2>&1 | tee /tmp/latex_cover_output.log
+            COVER_COMPILE_EXIT_CODE=${PIPESTATUS[0]}
+        else
+            pdflatex -interaction=nonstopmode -file-line-error -halt-on-error -output-directory="$BUILD_DIR" -jobname="$COVER_OUTPUT_NAME" "$COVER_LETTER" > /tmp/latex_cover_output.log 2>&1
+            COVER_COMPILE_EXIT_CODE=$?
+        fi
+        
+        if [ $COVER_COMPILE_EXIT_CODE -eq 0 ] && [ -f "${BUILD_DIR}/${COVER_OUTPUT_NAME}.pdf" ]; then
+            echo -e "${GREEN}✓ Successfully compiled cover letter: ${BUILD_DIR}/${COVER_OUTPUT_NAME}.pdf${NC}"
+        else
+            echo -e "${YELLOW}Warning: Cover letter compilation had issues${NC}"
+        fi
+    else
+        echo -e "${YELLOW}Warning: Cover letter compilation failed (non-fatal)${NC}"
+    fi
+fi
+
 # Clean auxiliary files if requested
 if [ "$CLEAN" = true ]; then
     echo -e "${YELLOW}Cleaning auxiliary files...${NC}"
@@ -235,6 +275,14 @@ if [ "$CLEAN" = true ]; then
           "${BUILD_DIR}/${OUTPUT_NAME}.snm" \
           "${BUILD_DIR}/${OUTPUT_NAME}.fdb_latexmk" \
           "${BUILD_DIR}/${OUTPUT_NAME}.fls"
+    # Clean cover letter auxiliary files if they exist
+    if [ -f "cover_letter.tex" ]; then
+        COVER_OUTPUT_NAME="cover-letter-${GIT_BRANCH}"
+        rm -f "${BUILD_DIR}/${COVER_OUTPUT_NAME}.aux" \
+              "${BUILD_DIR}/${COVER_OUTPUT_NAME}.log" \
+              "${BUILD_DIR}/${COVER_OUTPUT_NAME}.out" \
+              "${BUILD_DIR}/${COVER_OUTPUT_NAME}.synctex.gz"
+    fi
     echo -e "${GREEN}✓ Cleaned auxiliary files${NC}"
 fi
 
