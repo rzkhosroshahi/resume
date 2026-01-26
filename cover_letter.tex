@@ -1,0 +1,67 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[default,semibold]{sourcesanspro}
+\usepackage[margin=1in, top=1in, bottom=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+% Color matching resume
+\definecolor{highlight}{RGB}{61, 90, 128}
+\hypersetup{colorlinks=true,urlcolor=highlight}
+
+% Contact information
+\def\name{Reza Khosroshahi}
+\def\phone{(+98) 9107641448}
+\def\city{Tehran, Iran}
+\def\email{rzkhosroshahi@gmail.com}
+\def\LinkedIn{rzkhosroshahi}
+\def\github{rzkhosroshahi}
+
+% Letter formatting
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\raggedright
+
+\begin{document}
+
+% Header
+\begin{center}
+{\Large \textbf{\name}} \\
+\phone \quad | \quad \city \quad | \quad \href{mailto:\email}{\email} \\
+\href{https://github.com/\github}{GitHub} \quad | \quad \href{https://www.linkedin.com/in/\LinkedIn}{LinkedIn}
+\end{center}
+
+\vspace{1em}
+
+\today
+
+\vspace{1em}
+
+Hiring Manager \\
+Canvas Core Team \\
+Miro
+
+\vspace{1em}
+
+Dear Hiring Manager,
+
+I am writing to express my strong interest in the Frontend Engineer position on the Canvas Core team at Miro. Having followed Miro's growth as a platform enabling distributed teams to innovate, I am excited about the opportunity to contribute to the foundational canvas platform that powers experiences for over 100M users.
+
+What draws me to this role is the opportunity to work on platform infrastructure—building the runtime, transport layer, and widget foundations that enable other teams to deliver consistent multi-user experiences. This aligns perfectly with my experience at Arvancloud, where I designed and built a Micro Front-end platform infrastructure using Webpack Module Federation. This platform enabled multiple teams to independently deploy micro-apps while maintaining standardized widget foundations, directly improving developer experience across the organization. I understand the unique challenges of building platforms that other teams depend on—balancing flexibility with consistency, enabling speed while maintaining reliability.
+
+Throughout my career, I've consistently focused on performance and non-functional requirements, which I know are critical for Canvas Core. At Arvancloud, I optimized platform performance by creating a shared component library and refactoring legacy code, reducing bundle size from 4MB to 1MB (75\% reduction) and improving memory management. At Snapp, I enhanced application performance by replacing CSS-in-JS with Panda CSS, making modules tree-shakable and significantly reducing runtime overhead. I've also implemented real-time client-side transport/sync solutions handling 100,000+ messages, demonstrating my ability to work with the kind of scalable transport layer Canvas Core requires.
+
+I've made architectural decisions converting prototypes into mature, scalable platform solutions. I restructured codebases from flat folder structures to feature-based architectures, improving maintainability and developer experience for cross-functional teams. I've also built interactive canvas functionality with drag-and-drop widget foundations, enabling composable customization—experiences that resonate with Miro's canvas platform. My experience thinking systemically, balancing short-term needs with long-term platform health, and collaborating across teams positions me well to contribute to Canvas Core's mission.
+
+What excites me most about this role is the opportunity to improve platform developer experience while solving complex technical challenges at scale. I'm passionate about building foundations that enable teams to move faster, and I'm eager to bring this mindset to Miro's canvas platform. I'm particularly interested in contributing to the unification of widget building through computed components, standardizing Data Models, and enabling safe, composable customization—all while continuously improving performance and resilience.
+
+I would welcome the opportunity to discuss how my platform infrastructure experience, performance optimization expertise, and passion for developer experience can contribute to Canvas Core's ambitious goals. Thank you for considering my application.
+
+\vspace{1em}
+
+Sincerely, \\
+\name
+
+\end{document}

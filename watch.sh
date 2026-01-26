@@ -66,6 +66,7 @@ if command -v git &> /dev/null && git rev-parse --git-dir > /dev/null 2>&1; then
     GIT_BRANCH=$(echo "$GIT_BRANCH" | sed 's/[^a-zA-Z0-9._-]/-/g')
     OUTPUT_NAME="reza-khosroshahi-${GIT_BRANCH}"
 else
+    GIT_BRANCH="main"
     OUTPUT_NAME="reza-khosroshahi-main"
 fi
 
@@ -75,7 +76,7 @@ OUTPUT_PDF="${BUILD_DIR}/${OUTPUT_NAME}.pdf"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${GREEN}LaTeX Watch Mode${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "Watching: ${YELLOW}$LATEX_FILE${NC} and related .tex files"
+echo -e "Watching: ${YELLOW}$LATEX_FILE${NC} and related .tex files (including cover_letter.tex)"
 echo -e "Output PDF: ${YELLOW}${OUTPUT_PDF}${NC}"
 echo -e "Build directory: ${YELLOW}${BUILD_DIR}/${NC}"
 echo -e "Polling interval: ${YELLOW}${POLL_INTERVAL}s${NC}"
@@ -106,6 +107,12 @@ compile_resume() {
     
     if [ $COMPILE_EXIT -eq 0 ] && [ -f "$OUTPUT_PDF" ]; then
         echo -e "${GREEN}✓ Compilation successful!${NC}"
+        
+        # Check if cover letter was compiled
+        COVER_OUTPUT_PDF="${BUILD_DIR}/cover-letter-${GIT_BRANCH}.pdf"
+        if [ -f "$COVER_OUTPUT_PDF" ]; then
+            echo -e "${GREEN}✓ Cover letter compiled: ${COVER_OUTPUT_PDF}${NC}"
+        fi
         
         if [ "$OPEN_PDF" = true ]; then
             # Open PDF (macOS)
