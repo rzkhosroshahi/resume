@@ -3,9 +3,10 @@
 # LaTeX to PDF Compilation Script
 # Usage: ./compile.sh [options]
 # Options:
-#   -c, --clean    Clean auxiliary files after compilation
-#   -v, --verbose  Show verbose output
-#   -h, --help     Show this help message
+#   -c, --clean      Clean auxiliary files after compilation
+#   -v, --verbose    Show verbose output
+#   -r, --resume     Export compiled resume PDF to resume/reza-khosroshahi.pdf
+#   -h, --help       Show this help message
 
 # Colors for output
 RED='\033[0;31m'
@@ -16,6 +17,7 @@ NC='\033[0m' # No Color
 # Default values
 CLEAN=false
 VERBOSE=false
+EXPORT_RESUME=false
 LATEX_FILE="resume.tex"
 
 # Parse command line arguments
@@ -29,12 +31,17 @@ while [[ $# -gt 0 ]]; do
             VERBOSE=true
             shift
             ;;
+        -r|--resume)
+            EXPORT_RESUME=true
+            shift
+            ;;
         -h|--help)
             echo "Usage: $0 [options]"
             echo "Options:"
-            echo "  -c, --clean    Clean auxiliary files after compilation"
-            echo "  -v, --verbose  Show verbose output"
-            echo "  -h, --help     Show this help message"
+            echo "  -c, --clean      Clean auxiliary files after compilation"
+            echo "  -v, --verbose    Show verbose output"
+            echo "  -r, --resume     Export compiled resume PDF to resume/reza-khosroshahi.pdf"
+            echo "  -h, --help       Show this help message"
             exit 0
             ;;
         *)
@@ -212,6 +219,24 @@ fi
 # Check if PDF was created
 if [ -f "${BUILD_DIR}/${OUTPUT_NAME}.pdf" ]; then
     echo -e "${GREEN}✓ Successfully compiled: ${BUILD_DIR}/${OUTPUT_NAME}.pdf${NC}"
+    
+    # Optionally export a copy of the resume with a stable filename
+    if [ "$EXPORT_RESUME" = true ]; then
+        RESUME_DIR="resume"
+        RESUME_OUTPUT="${RESUME_DIR}/reza-khosroshahi.pdf"
+        
+        # Create resume directory if it doesn't exist
+        mkdir -p "$RESUME_DIR"
+        
+        # Remove previous exported resume if it exists
+        if [ -f "$RESUME_OUTPUT" ]; then
+            rm -f "$RESUME_OUTPUT"
+        fi
+        
+        # Copy freshly compiled PDF to the resume directory with fixed name
+        cp "${BUILD_DIR}/${OUTPUT_NAME}.pdf" "$RESUME_OUTPUT"
+        echo -e "${GREEN}✓ Exported resume to: ${RESUME_OUTPUT}${NC}"
+    fi
 else
     echo -e "${RED}Error: PDF file was not created!${NC}"
     exit 1
