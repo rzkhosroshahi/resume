@@ -1,8 +1,4 @@
-# Full Stack Developer / Software Development Engineer Resume Template
 
-## Project Link: [Kiran Mahajan (Overleaf)](https://www.overleaf.com/read/kdtwdwtsfbng#af5d24)
-
-![cover](./Kiran_Mahajan_Resume.png?raw=true)
 
 ### Tools used:
 
